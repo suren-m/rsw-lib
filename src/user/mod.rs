@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::{char::MAX, error::Error, usize};
 
 use crate::{
@@ -17,7 +18,7 @@ pub struct User {
 }
 
 pub struct UserFactory {
-    users: Vec<User>,
+    users: HashMap<UserId, User>,
     max_capacity: usize,
 }
 
@@ -25,7 +26,7 @@ impl UserFactory {
     // associative function
     pub fn new(capacity: usize) -> Self {
         UserFactory {
-            users: Vec::with_capacity(capacity),
+            users: HashMap::with_capacity(capacity),
             max_capacity: capacity,
         }
     }
@@ -42,21 +43,28 @@ impl UserFactory {
             return Err(msg);
         }
 
-        for id in (current_capacity + 1)..=(current_capacity + req_num) {
-            self.users.push(User {
+        let limit = current_capacity + req_num;
+        for id in (current_capacity + 1)..=limit {
+            let new_user_id = id;
+            let new_user = User {
                 id: id,
                 username: format!("user{}", id).to_string(),
                 last_login: None,
                 is_active: false,
                 active_devices: Vec::with_capacity(5), // max 5 devices
                 preferred_plaform: None,
-            })
+            };
+            self.users.insert(new_user_id, new_user);
         }
 
         Ok(self)
     }
 
-    pub fn get_users(&self) -> &Vec<User> {
+    pub fn get_users(&self) -> &HashMap<UserId, User> {
         &self.users
     }
+
+    // pub fn update_user(&mut self, user_id: UserId) {
+    //     let mut user = self.users.get_mut(index);
+    // }
 }
