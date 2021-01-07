@@ -1,22 +1,32 @@
-use device::Platform;
-use events::UserEvent;
-use user::UserFactory;
-
-mod device;
-mod events;
-mod user;
-
-fn gen() {
-    let factory = UserFactory::new(10).create_users(5).unwrap();
-    let test = factory.get_users();
-    let factory = factory.create_users(10).expect("can't add");
-    let test_again = factory.get_users();
-    println!("done");
-}
+//! rsw-lib provides libraries needed for rsw-app.
+/// # User Factory
+/// User factory provides a way to create `n` number of users
+/// Example:
+/// ```rust
+///        use rsw_lib::device::*;
+///        use rsw_lib::events::*;
+///        use rsw_lib::user::UserFactory;
+///
+///        let capacity = 10;
+///        let request = 5;
+///        let factory = UserFactory::new(capacity)
+///            .create_users(request)
+///            .unwrap();
+///        let res = factory.get_users();
+///        assert_eq!(request, res.len());
+///
+///        let additional = 5;
+///        let factory = factory.create_users(additional).unwrap();
+///        let res = factory.get_users();
+///        assert_eq!(10, res.len());
+/// ```
+pub mod device;
+pub mod events;
+pub mod user;
 
 #[cfg(test)]
 mod factory_tests {
-    use crate::{gen, user::UserFactory};
+    use crate::user::UserFactory;
 
     #[test]
     fn ensure_user_creation() {
