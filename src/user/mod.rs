@@ -8,6 +8,8 @@ use crate::{
 use chrono::prelude::*;
 
 pub type UserId = usize;
+
+#[derive(Debug, PartialEq, Clone)]
 pub struct User {
     id: UserId,
     username: String,
