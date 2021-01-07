@@ -13,7 +13,7 @@ pub struct User {
     username: String,
     last_login: Option<DateTime<Utc>>,
     is_active: bool,
-    active_devices: Vec<DeviceInfo>,
+    //active_devices: Vec<DeviceInfo>,
     preferred_plaform: Option<Platform>,
 }
 
@@ -65,7 +65,7 @@ impl UserFactory {
                 username: format!("user{}", id).to_string(),
                 last_login: None,
                 is_active: false,
-                active_devices: Vec::with_capacity(5), // max 5 devices
+                //active_devices: Vec::with_capacity(5), // max 5 devices
                 preferred_plaform: None,
             };
             self.users.insert(new_user_id, new_user);
