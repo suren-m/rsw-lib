@@ -17,6 +17,20 @@ pub struct User {
     preferred_plaform: Option<Platform>,
 }
 
+impl User {
+    pub fn is_active(&self) -> bool {
+        self.is_active
+    }
+
+    pub fn get_preferred_platform(&self) -> Option<Platform> {
+        match self.preferred_plaform {
+            Some(Platform::IOS) => Some(Platform::IOS),
+            Some(Platform::Android) => Some(Platform::Android),
+            _ => None,
+        }
+    }
+}
+
 pub struct UserFactory {
     users: HashMap<UserId, User>,
     max_capacity: usize,
@@ -64,7 +78,33 @@ impl UserFactory {
         &self.users
     }
 
-    // pub fn update_user(&mut self, user_id: UserId) {
-    //     let mut user = self.users.get_mut(index);
-    // }
+    pub fn get_user(&self, user_id: UserId) -> Option<&User> {
+        self.users.get(&user_id)
+    }
+
+    pub fn update_event(&mut self, event: UserEvent) {
+        match event {
+            UserEvent::Login(device_kind, user_id, timestamp) => {
+                let mut user = self.users.get_mut(&user_id).unwrap();
+                user.is_active = true;
+                user.last_login = Some(timestamp);
+                match device_kind {
+                    crate::device::DeviceKind::SmartPhone(Platform::Android) => {
+                        user.preferred_plaform = Some(Platform::Android);
+                    }
+                    crate::device::DeviceKind::SmartPhone(Platform::IOS) => {
+                        user.preferred_plaform = Some(Platform::IOS);
+                    }
+                    _ => {
+                        println!("not done yet");
+                    }
+                }
+            }
+            UserEvent::Logout(device, user_id, timestamp) => {
+                let mut user = self.users.get_mut(&user_id).unwrap();
+                user.is_active = false;
+                user.last_login = Some(timestamp);
+            }
+        }
+    }
 }
