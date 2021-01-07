@@ -53,3 +53,10 @@ fn get_after_update() {
     let users = factory.get_users();
     println!("done");
 }
+
+#[test]
+fn device_info_clone_test() {
+    let dev_kind = DeviceKind::SmartPhone(Platform::Android);
+    let dev_kind2 = dev_kind.clone();
+    assert_eq!(dev_kind, dev_kind2);
+}
