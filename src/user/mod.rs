@@ -82,6 +82,20 @@ impl UserFactory {
         self.users.get(&user_id)
     }
 
+    /// update event for users
+    /// ```rust
+    /// use chrono::Utc;
+    ///
+    /// use rsw_lib::{
+    ///     device::{DeviceKind, Platform},
+    ///     events::UserEvent,
+    ///     user::UserFactory,
+    /// };
+    /// let mut factory = UserFactory::new(10).create_users(5).unwrap();   
+    /// let kind = DeviceKind::SmartPhone(Platform::IOS);
+    /// let ev = UserEvent::Login(kind, 3, Utc::now());
+    /// factory.update_event(ev);
+    /// ```
     pub fn update_event(&mut self, event: UserEvent) {
         match event {
             UserEvent::Login(device_kind, user_id, timestamp) => {
